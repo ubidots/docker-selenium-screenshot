@@ -83,7 +83,6 @@ def resize_chromium_viewport(browser, height):
 
 
 def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
-    timeout = kwargs.get("timeout", 10000)
     app_selector_xpath = kwargs.get("app_selector_xpath", "//div[@id='root']")
     not_load_selector_xpath = kwargs.get(
         "not_load_selector_xpath", "//div[contains(@class, 'selenium-data-not-loaded')]"
@@ -92,7 +91,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     browser = _init_browser(url, width, height)
     try:
         # Wait until the root element is loaded
-        WebDriverWait(browser, timeout).until(
+        WebDriverWait(browser, 10000).until(
             EC.presence_of_element_located((By.XPATH, app_selector_xpath))
         )
         time.sleep(1)
@@ -100,11 +99,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
         # Check if the element is empty
         empty_elements = browser.find_elements_by_xpath(not_load_selector_xpath)
         if len(empty_elements) > 0:
-            return {
-                "status": "error",
-                "message": "Data was not loaded, selection `#root .selenium-data-not-loaded` detected.",
-                "image": None,
-            }
+            raise "Data was not loaded, selection `#root .selenium-data-not-loaded` detected."
         time.sleep(1)
 
         # Resize window for canvas widgets
@@ -115,9 +110,8 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
 
         # Take the screenshot
         _take_screenshot(browser, file_name)
-        return {"status": "ok", "message": None, "image": file_name}
     except Exception as ex:
-        return {"status": "error", "message": ex, "image": None}
+        print(ex)
     finally:
         if browser is not None:
             browser.quit()
@@ -126,9 +120,15 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
 if __name__ == "__main__":
     import sys
 
-    arguments = {}
-    for param in sys.argv[1:]:
-        values = param.split(" ")
-        arguments.update({values[0]: values[1]})
+    params = {
+        "url": sys.argv[1],
+        "file_name": sys.argv[2],
+        "width": sys.argv[3],
+        "height": sys.argv[4]
+    }
+    if len(sys.argv) == 7:
+        params.update(
+            {"app_selector_xpath": sys.argv[5], "not_load_selector_xpath": sys.argv[6]}
+        )
 
-    take_selenium_screenshot(**arguments)
+    take_selenium_screenshot(**params)
