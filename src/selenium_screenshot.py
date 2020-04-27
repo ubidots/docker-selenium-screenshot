@@ -61,6 +61,8 @@ def resize_chromium_viewport(browser, height):
     )
 
     if window_height != new_height:
+        # An extra margin to prevent hide some content
+        HEIGHT_DELTA = 150
         # Append a custom command with current browser session
         browser.command_executor._commands["send_command"] = (
             "POST",
@@ -73,7 +75,7 @@ def resize_chromium_viewport(browser, height):
                 "mobile": False,
                 # 1366 is a inherit value from puppeteer script
                 "width": 1366,
-                "height": max(new_height, window_height),
+                "height": max(new_height, window_height) + HEIGHT_DELTA,
                 "deviceScaleFactor": 1,
                 "screenOrientation": {"angle": 0, "type": "portraitPrimary"},
             },
