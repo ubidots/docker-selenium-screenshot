@@ -73,7 +73,6 @@ def resize_chromium_viewport(browser, height):
             "cmd": "Emulation.setDeviceMetricsOverride",
             "params": {
                 "mobile": False,
-                # 1366 is a inherit value from puppeteer script
                 "width": 1366,
                 "height": max(new_height, window_height) + HEIGHT_DELTA,
                 "deviceScaleFactor": 1,
