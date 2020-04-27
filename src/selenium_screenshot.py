@@ -61,8 +61,6 @@ def resize_chromium_viewport(browser, height):
     )
 
     if window_height != new_height:
-        # An extra margin to prevent hide some content
-        HEIGHT_DELTA = 150
         # Append a custom command with current browser session
         browser.command_executor._commands["send_command"] = (
             "POST",
@@ -74,7 +72,7 @@ def resize_chromium_viewport(browser, height):
             "params": {
                 "mobile": False,
                 "width": 1366,
-                "height": max(new_height, window_height) + HEIGHT_DELTA,
+                "height": max(new_height, window_height),
                 "deviceScaleFactor": 1,
                 "screenOrientation": {"angle": 0, "type": "portraitPrimary"},
             },
