@@ -128,14 +128,7 @@ if __name__ == "__main__":
 
     arguments = {}
     for param in sys.argv[1:]:
-        values = param.split(": ")
+        values = param.split(" ")
         arguments.update({values[0]: values[1]})
 
-    arguments.update(
-        {
-            "url": "https://industrial.ubidots.com/app/dashboards/public/widget/aOolXtn-lQ10xMRv8eL4ABnQGJw",
-            "file_name": "/tmp/assets/sebastian.png",
-        }
-    )
-    print("NAME", sys.argv)
     take_selenium_screenshot(**arguments)
