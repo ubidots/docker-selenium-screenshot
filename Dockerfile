@@ -12,4 +12,4 @@ RUN pip3 install selenium pyvirtualdisplay
 COPY src/selenium_screenshot.py selenium_screenshot.py
 
 # Run script
-ENTRYPOINT ["python3", "selenium_screenshot.py"]
+CMD ["python3", "selenium_screenshot.py"]
