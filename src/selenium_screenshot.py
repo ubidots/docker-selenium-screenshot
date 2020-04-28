@@ -18,7 +18,7 @@ def _init_browser(url, width=1000, height=500):
     try:
         window_width = int(width) if width is not None else 1000
         window_height = int(height) if height is not None else 500
-        display = Display(visible=0, size=(1386, 768))
+        display = Display(visible=0, size=(1366, 768))
         display.start()
 
         chrome_options = webdriver.ChromeOptions()
@@ -55,7 +55,8 @@ def resize_chromium_viewport(browser, height):
             var canvas = iframes[0];
             return canvas.contentDocument.body.scrollHeight;
         }
-        return arguments[0];
+        var VERTICAL_MARGIN = 16;
+        return Math.max(arguments[0], document.body.scrollHeight + VERTICAL_MARGIN);
     """,
         window_height,
     )
@@ -105,7 +106,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
         resize_chromium_viewport(browser, height)
 
         # Wait a little bit for DOM changes
-        time.sleep(1)
+        time.sleep(2)
 
         # Take the screenshot
         _take_screenshot(browser, file_name)
