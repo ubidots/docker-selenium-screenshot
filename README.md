@@ -11,7 +11,7 @@ Container for taking screenshots using selenium
 5. **app_selector_xpath** (*optional*): XPath selector for search the target content in the DOM. Default `//div[@id='root']`
 6. **not_load_selector_xpath** (*optional*): XPath selector when it can't find the content. Default `div[contains(@class, 'selenium-data-not-loaded')]`
 
-**Note**: Everything arguments are positional, each one must be sent in the order described above.
+**Note**: Every argument is positional, each one must be sent in the order described above.
 
 
 ## Usage
@@ -21,7 +21,7 @@ To build the container, execute:
 cd docker-selenium-screenshot
 
 # Run docker build
-docker build docker build --tag <tag name> .
+docker build --tag <tag name> .
 ```
 
 The container has a volume where it will put the screenshots took `tmp/assets`
