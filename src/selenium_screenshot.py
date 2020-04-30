@@ -44,6 +44,7 @@ def resize_chromium_viewport(browser, width, height):
         height -- Browser height
     """
     window_height = int(height) if height is not None else 500
+    window_width = int(width) if width is not None else 1000
     # Run javasript script to get the iframe's body height
     new_height = browser.execute_script(
         """
@@ -70,7 +71,7 @@ def resize_chromium_viewport(browser, width, height):
             "cmd": "Emulation.setDeviceMetricsOverride",
             "params": {
                 "mobile": False,
-                "width": width,
+                "width": window_width,
                 "height": max(new_height, window_height),
                 "deviceScaleFactor": 1,
                 "screenOrientation": {"angle": 0, "type": "portraitPrimary"},
