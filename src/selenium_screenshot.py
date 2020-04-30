@@ -103,7 +103,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     # Check if the element is empty
     empty_elements = browser.find_elements_by_xpath(not_load_selector_xpath)
     if len(empty_elements) > 0:
-        raise "Data was not loaded, selection `#root .selenium-data-not-loaded` detected."
+        raise "Data was not loaded, selection `{}` detected.".format(not_load_selector_xpath)
     time.sleep(timeout)
 
     # Resize window for canvas widgets
