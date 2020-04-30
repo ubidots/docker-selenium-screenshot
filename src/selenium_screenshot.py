@@ -48,7 +48,7 @@ def resize_chromium_viewport(browser, width, height, app_selector_xpath):
     # Run javasript script to get the iframe's body height
     new_height = browser.execute_script(
         """
-        # Find the target content using XPath
+        // Find the target content using XPath
         var targetNode = document.evaluate(arguments[1], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         if (!targetNode) return arguments[0];
 
@@ -90,6 +90,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     not_load_selector_xpath = kwargs.get(
         "not_load_selector_xpath", "//div[contains(@class, 'selenium-data-not-loaded')]"
     )
+    timeout = kwargs.get("timeout", 10);
     # Init chromium
     browser = _init_browser(url, width, height)
 
@@ -103,7 +104,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     empty_elements = browser.find_elements_by_xpath(not_load_selector_xpath)
     if len(empty_elements) > 0:
         raise "Data was not loaded, selection `#root .selenium-data-not-loaded` detected."
-    time.sleep(1)
+    time.sleep(timeout)
 
     # Resize window for canvas widgets
     resize_chromium_viewport(browser, width, height, app_selector_xpath)
@@ -127,9 +128,14 @@ if __name__ == "__main__":
         "width": sys.argv[3],
         "height": sys.argv[4]
     }
-    if len(sys.argv) == 7:
+    if len(sys.argv) in [7, 8]:
         PARAMS.update(
             {"app_selector_xpath": sys.argv[5], "not_load_selector_xpath": sys.argv[6]}
+        )
+
+    if len(sys.argv) == 8:
+        PARAMS.update(
+            {"timeout": sys.argv[7]}
         )
 
     take_selenium_screenshot(**PARAMS)

@@ -10,6 +10,7 @@ Container for taking screenshots using selenium
 4. **height**: Initial height for the browser
 5. **app_selector_xpath** (*optional*): XPath selector for search the target content in the DOM. Default `//div[@id='root']`
 6. **not_load_selector_xpath** (*optional*): XPath selector when it can't find the content. Default `div[contains(@class, 'selenium-data-not-loaded')]`
+7. **timeout** (*optional*): The time to wait until the content load. Default `10s`
 
 **Note**: Every argument is positional, each one must be sent in the order described above.
 
