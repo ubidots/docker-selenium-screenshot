@@ -3,7 +3,6 @@ import time
 from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -60,7 +59,8 @@ def resize_chromium_viewport(browser, width, height, app_selector_xpath):
         var VERTICAL_MARGIN = 16;
         return Math.max(arguments[0], document.body.scrollHeight + VERTICAL_MARGIN);
     """,
-        window_height, app_selector_xpath,
+        window_height,
+        app_selector_xpath,
     )
 
     if window_height != new_height:
@@ -104,7 +104,9 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     empty_elements = browser.find_elements_by_xpath(not_load_selector_xpath)
     if len(empty_elements) > 0:
         raise ValueError(
-            "Data was not loaded, selection {} detected.".format(not_load_selector_xpath)
+            "Data was not loaded, selection {} detected.".format(
+                not_load_selector_xpath
+            )
         )
 
     # Resize window for canvas widgets
@@ -127,7 +129,7 @@ if __name__ == "__main__":
         "url": sys.argv[1],
         "file_name": sys.argv[2],
         "width": sys.argv[3],
-        "height": sys.argv[4]
+        "height": sys.argv[4],
     }
     if len(sys.argv) in [7, 8]:
         PARAMS.update(
@@ -135,8 +137,6 @@ if __name__ == "__main__":
         )
 
     if len(sys.argv) == 8:
-        PARAMS.update(
-            {"timeout": sys.argv[7]}
-        )
+        PARAMS.update({"timeout": sys.argv[7]})
 
     take_selenium_screenshot(**PARAMS)
