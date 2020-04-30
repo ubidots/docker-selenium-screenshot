@@ -35,7 +35,7 @@ def _init_browser(url, width=1000, height=500):
     return browser
 
 
-def resize_chromium_viewport(browser, height):
+def resize_chromium_viewport(browser, width, height):
     """
         Change the viewport value of  iframe content only when the document has just one
 
@@ -70,7 +70,7 @@ def resize_chromium_viewport(browser, height):
             "cmd": "Emulation.setDeviceMetricsOverride",
             "params": {
                 "mobile": False,
-                "width": 1366,
+                "width": width,
                 "height": max(new_height, window_height),
                 "deviceScaleFactor": 1,
                 "screenOrientation": {"angle": 0, "type": "portraitPrimary"},
@@ -101,7 +101,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     time.sleep(1)
 
     # Resize window for canvas widgets
-    resize_chromium_viewport(browser, height)
+    resize_chromium_viewport(browser, width, height)
 
     # Wait a little bit for DOM changes
     time.sleep(2)
