@@ -1,11 +1,13 @@
+"""Module to take an screenshot using selenium"""
 import time
 
-from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+# pylint: disable=import-error
+from pyvirtualdisplay import Display
 
 def _take_screenshot(browser, file_name):
     img = browser.get_screenshot_as_png()
@@ -45,6 +47,7 @@ def resize_chromium_viewport(browser, width, height, app_selector_xpath):
     window_height = int(height) if height is not None else 500
     window_width = int(width) if width is not None else 1000
     # Run javasript script to get the iframe's body height
+    # pylint: disable=line-too-long
     new_height = browser.execute_script(
         """
         // Find the target content using XPath
@@ -86,6 +89,17 @@ def resize_chromium_viewport(browser, width, height, app_selector_xpath):
 
 
 def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
+    """ Take an screenshot using selenium
+
+        Keyword arguments:
+        url -- URL Page to take the screenshot
+        file_name -- Image path name
+        width -- Browser width. Default 1000
+        height -- Browser height. Default 500
+        app_selector_xpath -- Target content XPath selector
+        not_load_selector_xpath -- XPath selector to identify an empty page
+        timeout -- The time to wait until the content load
+    """
     app_selector_xpath = kwargs.get("app_selector_xpath", "//div[@id='root']")
     not_load_selector_xpath = kwargs.get(
         "not_load_selector_xpath", "//div[contains(@class, 'selenium-data-not-loaded')]"
