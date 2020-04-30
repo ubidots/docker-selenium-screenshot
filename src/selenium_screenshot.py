@@ -60,6 +60,7 @@ def resize_chromium_viewport(browser, height):
 
     if window_height != new_height:
         # Append a custom command with current browser session
+        # pylint: disable=protected-access
         browser.command_executor._commands["send_command"] = (
             "POST",
             "/session/{0}/chromium/send_command".format(browser.session_id),
@@ -115,15 +116,15 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
 if __name__ == "__main__":
     import sys
 
-    params = {
+    PARAMS = {
         "url": sys.argv[1],
         "file_name": sys.argv[2],
         "width": sys.argv[3],
         "height": sys.argv[4]
     }
     if len(sys.argv) == 7:
-        params.update(
+        PARAMS.update(
             {"app_selector_xpath": sys.argv[5], "not_load_selector_xpath": sys.argv[6]}
         )
 
-    take_selenium_screenshot(**params)
+    take_selenium_screenshot(**PARAMS)
