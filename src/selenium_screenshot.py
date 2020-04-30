@@ -98,13 +98,14 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     WebDriverWait(browser, 10000).until(
         EC.presence_of_element_located((By.XPATH, app_selector_xpath))
     )
-    time.sleep(1)
+    time.sleep(timeout)
 
     # Check if the element is empty
     empty_elements = browser.find_elements_by_xpath(not_load_selector_xpath)
     if len(empty_elements) > 0:
-        raise "Data was not loaded, selection {} detected.".format(not_load_selector_xpath)
-    time.sleep(timeout)
+        raise ValueError(
+            "Data was not loaded, selection {} detected.".format(not_load_selector_xpath)
+        )
 
     # Resize window for canvas widgets
     resize_chromium_viewport(browser, width, height, app_selector_xpath)
