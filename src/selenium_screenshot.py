@@ -35,7 +35,7 @@ def _init_browser(url, width=1000, height=500):
     return browser
 
 
-def resize_chromium_viewport(browser, width, height):
+def resize_chromium_viewport(browser, width, height, app_selector_xpath):
     """
         Change the viewport value of  iframe content only when the document has just one
 
@@ -48,7 +48,11 @@ def resize_chromium_viewport(browser, width, height):
     # Run javasript script to get the iframe's body height
     new_height = browser.execute_script(
         """
-        var iframes = document.querySelectorAll('iframe');
+        # Find the target content using XPath
+        var targetNode = document.evaluate(arguments[1], document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        if (!targetNode) return arguments[0];
+
+        var iframes = targetNode.querySelectorAll('iframe');
         if (iframes.length === 1) {
             var canvas = iframes[0];
             return canvas.contentDocument.body.scrollHeight;
@@ -56,7 +60,7 @@ def resize_chromium_viewport(browser, width, height):
         var VERTICAL_MARGIN = 16;
         return Math.max(arguments[0], document.body.scrollHeight + VERTICAL_MARGIN);
     """,
-        window_height,
+        window_height, app_selector_xpath,
     )
 
     if window_height != new_height:
@@ -102,7 +106,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     time.sleep(1)
 
     # Resize window for canvas widgets
-    resize_chromium_viewport(browser, width, height)
+    resize_chromium_viewport(browser, width, height, app_selector_xpath)
 
     # Wait a little bit for DOM changes
     time.sleep(2)
