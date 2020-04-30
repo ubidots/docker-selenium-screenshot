@@ -90,7 +90,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     not_load_selector_xpath = kwargs.get(
         "not_load_selector_xpath", "//div[contains(@class, 'selenium-data-not-loaded')]"
     )
-    timeout = kwargs.get("timeout", 10);
+    timeout = int(kwargs.get("timeout", 10))
     # Init chromium
     browser = _init_browser(url, width, height)
 
