@@ -15,27 +15,24 @@ def _take_screenshot(browser, file_name):
 
 
 def _init_browser(url, width=1000, height=500):
-    try:
-        window_width = int(width) if width is not None else 1000
-        window_height = int(height) if height is not None else 500
-        display = Display(visible=0, size=(1366, 768))
-        display.start()
+    window_width = int(width) if width is not None else 1000
+    window_height = int(height) if height is not None else 500
+    display = Display(visible=0, size=(1366, 768))
+    display.start()
 
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
 
-        chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
-        chrome_options.add_experimental_option(
-            "prefs", {"download.prompt_for_download": False}
-        )
-        browser = webdriver.Chrome(options=chrome_options)
-        browser.set_window_size(window_width, window_height)
-        browser.get(url)
+    chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    chrome_options.add_experimental_option(
+        "prefs", {"download.prompt_for_download": False}
+    )
+    browser = webdriver.Chrome(options=chrome_options)
+    browser.set_window_size(window_width, window_height)
+    browser.get(url)
 
-        return browser
-    except Exception as ex:
-        return None
+    return browser
 
 
 def resize_chromium_viewport(browser, height):
@@ -89,32 +86,30 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     )
     # Init chromium
     browser = _init_browser(url, width, height)
-    try:
-        # Wait until the root element is loaded
-        WebDriverWait(browser, 10000).until(
-            EC.presence_of_element_located((By.XPATH, app_selector_xpath))
-        )
-        time.sleep(1)
 
-        # Check if the element is empty
-        empty_elements = browser.find_elements_by_xpath(not_load_selector_xpath)
-        if len(empty_elements) > 0:
-            raise "Data was not loaded, selection `#root .selenium-data-not-loaded` detected."
-        time.sleep(1)
+    # Wait until the root element is loaded
+    WebDriverWait(browser, 10000).until(
+        EC.presence_of_element_located((By.XPATH, app_selector_xpath))
+    )
+    time.sleep(1)
 
-        # Resize window for canvas widgets
-        resize_chromium_viewport(browser, height)
+    # Check if the element is empty
+    empty_elements = browser.find_elements_by_xpath(not_load_selector_xpath)
+    if len(empty_elements) > 0:
+        raise "Data was not loaded, selection `#root .selenium-data-not-loaded` detected."
+    time.sleep(1)
 
-        # Wait a little bit for DOM changes
-        time.sleep(2)
+    # Resize window for canvas widgets
+    resize_chromium_viewport(browser, height)
 
-        # Take the screenshot
-        _take_screenshot(browser, file_name)
-    except Exception as ex:
-        print(ex)
-    finally:
-        if browser is not None:
-            browser.quit()
+    # Wait a little bit for DOM changes
+    time.sleep(2)
+
+    # Take the screenshot
+    _take_screenshot(browser, file_name)
+
+    if browser is not None:
+        browser.quit()
 
 
 if __name__ == "__main__":
