@@ -108,8 +108,8 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     # Init chromium
     browser = _init_browser(url, width, height)
 
-    # Wait until the root element is loaded
-    WebDriverWait(browser, 10000).until(
+    # Wait until the root element is loaded. Value in seconds
+    WebDriverWait(browser, timeout).until(
         EC.presence_of_element_located((By.XPATH, app_selector_xpath))
     )
     time.sleep(timeout)
