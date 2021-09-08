@@ -9,6 +9,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 # pylint: disable=import-error
 from pyvirtualdisplay import Display
 
+MAX_ATTEMPTS = 3
+
 def _take_screenshot(browser, file_name):
     img = browser.get_screenshot_as_png()
     with open(file_name, "wb") as image:
@@ -101,6 +103,7 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
         timeout -- The time to wait until the content load
     """
     app_selector_xpath = kwargs.get("app_selector_xpath", "//div[@id='root']")
+    loading_selector_xpath = kwargs.get("loading_selector_xpath", "//div[contains(@class, 'selenium-data-loading')]")
     not_load_selector_xpath = kwargs.get(
         "not_load_selector_xpath", "//div[contains(@class, 'selenium-data-not-loaded')]"
     )
@@ -112,7 +115,14 @@ def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     WebDriverWait(browser, timeout).until(
         EC.presence_of_element_located((By.XPATH, app_selector_xpath))
     )
+
     time.sleep(timeout)
+
+    for _ in range(MAX_ATTEMPTS):
+        loading_elements = browser.find_elements_by_xpath(loading_selector_xpath)
+        if len(loading_elements) == 0:
+            break
+        time.sleep(timeout)
 
     # Check if the element is empty
     empty_elements = browser.find_elements_by_xpath(not_load_selector_xpath)
