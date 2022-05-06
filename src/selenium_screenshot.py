@@ -217,10 +217,10 @@ def _take_selenium_screenshot_validate_render(
 def take_selenium_screenshot(url, file_name, width=1000, height=500, **kwargs):
     if kwargs.pop("validate_render", False):
         return _take_selenium_screenshot_validate_render(
-            url, file_name, width=1000, height=500, **kwargs
+            url, file_name, width=width, height=height, **kwargs
         )
     return _take_selenium_screenshot_validate_load(
-        url, file_name, width=1000, height=500, **kwargs
+        url, file_name, width=width, height=height, **kwargs
     )
 
 
