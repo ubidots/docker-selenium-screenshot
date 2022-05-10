@@ -138,15 +138,15 @@ def _take_selenium_screenshot_validate_load(
 
     for _ in range(MAX_ATTEMPTS):
         time.sleep(timeout)
-        loading_elements = browser.find_elements_by_xpath(loading_selector_xpath)
+        loading_elements = browser.find_elements(By.XPATH,loading_selector_xpath)
         if len(loading_elements) == 0:
             break
     # Check if the element is empty
-    empty_elements = browser.find_elements_by_xpath(not_load_selector_xpath)
+    empty_elements = browser.find_elements(By.XPATH,not_load_selector_xpath)
 
     # check if loading element is empty
 
-    loading_elements = browser.find_elements_by_xpath(loading_selector_xpath)
+    loading_elements = browser.find_elements(By.XPATH,loading_selector_xpath)
 
     if len(empty_elements) > 0 or len(loading_elements) > 0:
         raise ValueError(
