@@ -233,15 +233,15 @@ if __name__ == "__main__":
         "width": sys.argv[3],
         "height": sys.argv[4],
     }
-    if len(sys.argv) in [7, 8]:
+    if len(sys.argv) >= 7:
         PARAMS.update(
             {"app_selector_xpath": sys.argv[5], "not_load_selector_xpath": sys.argv[6]}
         )
 
-    if len(sys.argv) == 8:
+    if len(sys.argv) >= 8:
         PARAMS.update({"timeout": sys.argv[7]})
 
-    if len(sys.argv) == 9:
-        PARAMS.update({"validate_render": strtobool(sys.argv[7])})
+    if len(sys.argv) >= 9:
+        PARAMS.update({"validate_render": strtobool(sys.argv[8])})
 
     take_selenium_screenshot(**PARAMS)
