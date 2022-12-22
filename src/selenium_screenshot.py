@@ -2,6 +2,7 @@
 import time
 
 from selenium import webdriver
+from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -106,6 +107,18 @@ def resize_chromium_viewport(browser, width, height, app_selector_xpath):
         browser.execute("send_command", params)
 
 
+def move_cursor_to_origin(browser):
+    """
+    Move cursor to top left corner to avoid undesirable hover effects.
+
+    Keyword arguments:
+    browser -- Selenium browser instance
+    """
+    action = ActionBuilder(browser)
+    action.pointer_action.move_to_location(0, 0)
+    action.perform()
+
+
 def _take_selenium_screenshot_validate_load(
     url, file_name, width=1000, height=500, **kwargs
 ):
@@ -156,6 +169,8 @@ def _take_selenium_screenshot_validate_load(
     # Resize window for canvas widgets
     resize_chromium_viewport(browser, width, height, app_selector_xpath)
 
+    move_cursor_to_origin(browser)
+
     # Wait a little bit for DOM changes
     time.sleep(2)
 
@@ -205,6 +220,9 @@ def _take_selenium_screenshot_validate_render(
 
     # Resize window for canvas widgets
     resize_chromium_viewport(browser, width, height, app_selector_xpath)
+
+    move_cursor_to_origin(browser)
+
     # Wait a little bit for DOM changes
     time.sleep(2)
     # Take the screenshot
